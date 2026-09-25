@@ -1,0 +1,8 @@
+const e=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const title=s=>e(s).replace(/\*\*(.+?)\*\*/gs,'<em>$1</em>');
+export function photoStoryHTML(p,s,i){
+const footer=`<footer><span>@${e(p.instagram)}</span><span>${String(i+1).padStart(2,'0')} / ${p.slides.length}</span></footer>`;
+if(s.art==='brand-end')return `<article class="photo-story brand-end"><img class="brand-lockup" src="${e(s.logo)}"><p class="brand-tagline">콘텐츠 기획 · 영상 제작 · 마케팅</p><h2>${title(s.title)}</h2><p class="benefit">${e(s.body)}</p><div class="brand-showcase">${s.previews.map(x=>`<img src="${e(x)}">`).join('')}</div><div class="brand-divider"><span></span><img src="${e(s.symbol)}"><span></span></div><div class="brand-action"><p>${e(s.closing)}</p><strong>${e(s.action)}</strong><small>${e(s.note)}</small></div>${footer}</article>`;
+const rows=(s.rules||'').split('\n').filter(Boolean).map(x=>{const [a,...b]=x.split('|');return `<div class="photo-row"><b>${e(a.trim())}</b><span>${e(b.join('|').trim())}</span></div>`}).join('');
+return `<article class="photo-story ${i===0?'photo-cover':''}"><img class="photo-bg" src="${e(s.image)}"><div class="photo-shade"></div><header><span>MONG PD</span><span>CONTENT REVIEW</span></header><main class="photo-copy"><p class="photo-kicker">${e(s.eyebrow)}</p><h2>${title(s.title)}</h2><p class="photo-lead">${e(s.body)}</p>${rows?`<div class="photo-rule"></div><div class="photo-rows">${rows}</div>`:''}${s.sequenceEnd?`<p class="photo-closing">${e(s.sequenceEnd)}</p>`:''}${s.closing?`<p class="photo-closing">${e(s.closing)}</p>`:''}</main>${footer}</article>`;
+}
